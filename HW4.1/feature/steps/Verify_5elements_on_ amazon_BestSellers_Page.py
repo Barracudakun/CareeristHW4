@@ -1,21 +1,16 @@
 from behave import *
 from selenium import webdriver
-from time import sleep
-
 from selenium.webdriver.common.by import By
 
 
 @given('Open amazon best seller page')
-def step_impl(context):
+def open_amazon_bellerPage(context):
     context.driver = webdriver.Chrome('/Users/seashore/Dropbox/My Mac (MacBook-Air.lan)/Downloads/chromedriver')
     context.driver.get('https://www.amazon.com/gp/bestsellers/?ref_=nav_cs_bestsellers')
+    context.driver.implicitly_wait(10)
 
 
-@when('Find Best Sellers,New Releases,Movers & Shakers, Most Wished For , Gift Ideas elements')
-def step_impl(context):
-    context.find_element(By.CSS_SELECTOR, ".zg_selected a")
-    context.find_element(By.CSS_SELECTOR, "")
-
-@then(u'verify there are 5 links: Best Sellers,New Releases,Movers & Shakers, Most Wished For , Gift Ideas on the page')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verify there are 5 links: Best Sellers,New Releases,Movers & Shakers, Most Wished For , Gift Ideas on the page')
+@then('Verify there are {expected_links} links')
+def verify_links_count(context,expected_links):
+    actual_links = context.driver.find_elements(By.CSS_SELECTOR, '#zg_tabs a')
+    assert len(actual_links) == int(expected_links)
